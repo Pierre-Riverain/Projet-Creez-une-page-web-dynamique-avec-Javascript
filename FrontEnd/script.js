@@ -1,7 +1,7 @@
 let works = window.localStorage.getItem("works");
 
 if (works === null) {
-    const answer = await fetch("http://localhost:5678/api/works");
+    const answer = await fetch("http://portfolio-sophie-bluel.pierreriverain.fr:5678/api/works"); //http://localhost:5678/api/works
     works = await answer.json();
     
     const valueWorks = JSON.stringify(works);
