@@ -1,10 +1,11 @@
-const WORKS_KEY = "works";
-const CATEGORIES_OF_WORKS_KEY = "categoriesOfWorks";
+const LOCAL_STORAGE_WORKS_KEY = "works";
+const LOCAL_STORAGE_CATEGORIES_OF_WORKS_KEY = "categoriesOfWorks";
+export const LOCAL_STORAGE_CONNEXION_STATUS_KEY = "connexionStatus";
 
-let connexionStatus;
+export let works = window.localStorage.getItem(LOCAL_STORAGE_WORKS_KEY);
+export let categoriesOfWorks = window.localStorage.getItem(LOCAL_STORAGE_CATEGORIES_OF_WORKS_KEY);
 
-export let works = window.localStorage.getItem(WORKS_KEY);
-export let categoriesOfWorks = window.localStorage.getItem(CATEGORIES_OF_WORKS_KEY);
+let listOfConnexionListeners = [];
 
 /*
     Cette fonction charge les données des travaux présent localement ou 
@@ -18,7 +19,7 @@ export async function loadWorksDatas() {
         works = await answer.json();
 
         const valueWorks = JSON.stringify(works);
-        window.localStorage.setItem(WORKS_KEY, valueWorks);
+        window.localStorage.setItem(LOCAL_STORAGE_WORKS_KEY, valueWorks);
     } else {
         works = JSON.parse(works);
     }
@@ -35,25 +36,30 @@ export async function loadCategoriesOfWorksDatas() {
         categoriesOfWorks = await answer.json();
 
         const valuesCategoriesOfWorks = JSON.stringify(categoriesOfWorks);
-        window.localStorage.setItem(CATEGORIES_OF_WORKS_KEY, valuesCategoriesOfWorks);
+        window.localStorage.setItem(LOCAL_STORAGE_CATEGORIES_OF_WORKS_KEY, valuesCategoriesOfWorks);
     } else {
         categoriesOfWorks = JSON.parse(categoriesOfWorks);
     }
 }
 
 /*
-    Cette fonction envoie la requête de connexion.
+    Cette fonction va sauvegarder les données modifiées au serveur et localement.
+*/
+export async function saveModifiedDatas(datasModified) {
+    
+}
+
+/*
+    Cette fonction envoie la requête de connexion et enregistre le résultat obtenu du
+    serveur.
 */
 export async function logIn(login) {
+
     const answerLogIn = await fetch("http://localhost:5678/api/users/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: login
     });
 
-    if (answerLogIn.ok) {
-        connexionStatus = answerLogIn;
-    }
-
-    return answerLogIn;
+    return answerLogIn.ok;
 }

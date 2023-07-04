@@ -1,7 +1,8 @@
-import { loadWorksDatas, loadCategoriesOfWorksDatas, works, categoriesOfWorks } from "./datas.js";
+import { loadWorksDatas, loadCategoriesOfWorksDatas, works, categoriesOfWorks, LOCAL_STORAGE_CONNEXION_STATUS_KEY } from "./datas.js";
+import { editorMode } from "./editor.js";
 
-loadWorksDatas();
-loadCategoriesOfWorksDatas();
+await loadWorksDatas();
+await loadCategoriesOfWorksDatas();
 
 /*  
     Cette fonction va mettre à jour l'affichage de la liste des travaux sur la page web. 
@@ -31,9 +32,6 @@ function updateWorksDisplay(works, containerElementIdentifier) {
 }
 
 updateWorksDisplay(works,".gallery");
-
-
-/* ----- Cette partie concerne les boutons filtres de la galerie ----- */
 
 /*
     Cette fonction initialise les filtres en ajoutant les boutons 
@@ -88,3 +86,23 @@ function initButtonsFilter(btnSelected) {
 
 initButtonsFilter();
 
+/*
+    Cette fonction indique si l'utilisateur est connecté.
+*/
+export function isConnected() {
+    const connexion = window.localStorage.getItem(LOCAL_STORAGE_CONNEXION_STATUS_KEY);
+    if (connexion !== undefined && connexion !== null) {
+        return connexion === "true";
+    } else {
+        console.log(`[IS_CONNECTED] Aucune donnée n'est présente localement en ce qui concerne l'utilisateur.`);
+        return false;
+    }
+}
+
+if (isConnected()) {
+    console.log("[INDEX] Un utilisateur s'est connecté, entrée en mode édition !");
+    const bodyContainer = document.body;
+    editorMode(bodyContainer);
+} else {
+    console.log("[INDEX] Aucun utilisateur n'est connecté actuellement.");
+}

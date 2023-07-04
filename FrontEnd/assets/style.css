@@ -156,7 +156,12 @@ a {
 	color: black;
 }
 
-/* Cette partie concernant les titres de niveau 1. */
+.btn {
+	border-radius: 60px;
+	padding: 9px;
+}
+
+/* Cette partie concernant les titres. */
 h1 {
 	display: flex;
 	flex-direction: column;
@@ -172,7 +177,6 @@ h1>span {
 	letter-spacing: 0.1em;
 }
 
-/* Cette partie concernant les titres de niveau 2. */
 h2 {
 	font-family: 'Syne';
 	font-weight: 700;
@@ -234,12 +238,15 @@ nav a:hover {
 	margin-bottom: 0.5em;
 }
 
+/* 
+	Cette partie concerne la gallerie ainsi que les filtres des travaux effectués par
+	l'architecte d'intérieur.
+*/
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 1em;
 }
 
-/* Cette partie concerne les filtres des travaux effectués par l'architecte d'intérieur. */
 .filters {
 	display: flex;
 	flex-direction: row;
@@ -253,8 +260,6 @@ nav a:hover {
 	background-color: white;
 	border: 1px solid #1D6154;
 	text-align: center;
-	border-radius: 60px;
-	padding: 9px;
 	min-width: 100px;
 	width: auto;
 	margin-left: 5px;
@@ -266,7 +271,6 @@ nav a:hover {
 	background-color: #1D6154;
 }
 
-/* Cette partie concerne la gallerie affichant les travaux de l'architecte d'intérieur. */
 .gallery {
 	width: 100%;
 	display: grid;
@@ -339,18 +343,58 @@ input[type="submit"] {
 	margin: 2em auto;
 	width: 180px;
 	text-align: center;
-	border-radius: 60px;
 }
-
 
 #login a {
 	width: 50%;
 	margin: auto;
 }
 
-/* Cette partie concerne le pied de page. */
+.messageContainer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 24px;
+}
+
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
 	margin: 2em;
+}
+
+/* Cette partie concerne le mode édition de la page d'accueil. */
+.banner-editor-mode {
+	justify-content: center;
+	align-items: center;
+	gap: 20px;
+	width: 100%;
+	height: 59px;
+	background-color: black;
+}
+
+.banner-editor-mode div {
+	display: flex;
+	gap: 9px;
+}
+
+.banner-editor-mode i {
+	color: white;
+}
+
+.banner-editor-mode .btn {
+	background-color: white;
+	color: black;
+}
+
+.btn-modify {
+	display: flex;
+	gap: 10px;
+}
+
+.portfolio-title-container {
+	display: flex;
+	justify-content: center;
+	gap: 31px;
+	margin-bottom: 1em;
 }
