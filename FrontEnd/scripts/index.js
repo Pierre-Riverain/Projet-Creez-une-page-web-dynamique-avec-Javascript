@@ -1,8 +1,18 @@
-import { loadWorksDatas, loadCategoriesOfWorksDatas, works, categoriesOfWorks, LOCAL_STORAGE_CONNEXION_STATUS_KEY } from "./datas.js";
-import { editorMode } from "./editor.js";
+import { loadWorksDatas, loadCategoriesOfWorksDatas, works, categoriesOfWorks } from "./datas.js";
+import * as editorMode from "./editor.js";
+
+const token = localStorage.getItem("token") !== null && localStorage.getItem("token") !== undefined;
+console.log(`=====> Statut de la connexion : ${(token ? "connecté" : "non connecté")}.`);
 
 await loadWorksDatas();
 await loadCategoriesOfWorksDatas();
+
+if (token) {
+    console.log(document.body.style.margin);
+    editorMode.addBannerEditor(document.body);
+    editorMode.modifyLinkLogin();
+    editorMode.addModifyButtons();
+}
 
 /*  
     Cette fonction va mettre à jour l'affichage de la liste des travaux sur la page web. 
@@ -31,78 +41,60 @@ function updateWorksDisplay(works, containerElementIdentifier) {
     }
 }
 
-updateWorksDisplay(works,".gallery");
+updateWorksDisplay(works, ".gallery");
 
 /*
     Cette fonction initialise les filtres en ajoutant les boutons 
 */
-function initButtonsFilter(btnSelected) {
+function initButtonsFilter() {
+    if (token) {
+        editorMode.hideButtonsFilter();
+    } else {
+        const filtersContainer = document.querySelector(".filters");
 
-    const filtersContainer = document.querySelector(".filters");
-
-    const buttonNoFilter = document.createElement("input");
-    buttonNoFilter.type = "submit";
-    buttonNoFilter.value = "Tous";
-    buttonNoFilter.classList.add("btn");
-    buttonNoFilter.classList.add("btn_selected");
-    buttonNoFilter.addEventListener("click", (event) => {
-
-        document.querySelector(".filters .btn_selected").classList.remove("btn_selected");
-        event.target.classList.add("btn_selected");
-
-        updateWorksDisplay(works, ".gallery");
-    });
-    filtersContainer.appendChild(buttonNoFilter);
-
-    for (let i = 0; i < categoriesOfWorks.length; i++) {
-
-        const buttonFilter = document.createElement("input");
-        buttonFilter.type = "submit";
-        buttonFilter.classList.add("btn");
-
-        const categoryOfWork = categoriesOfWorks[i];
-
-        if (i === 3) {
-            buttonFilter.value = "Hôtels & restaurants";
-        } else {
-            buttonFilter.value = categoryOfWork.name;
-        }
-        buttonFilter.dataset.categoryOfWork_name = categoryOfWork.name;
-        buttonFilter.addEventListener("click", (event) => {
+        const buttonNoFilter = document.createElement("input");
+        buttonNoFilter.type = "submit";
+        buttonNoFilter.value = "Tous";
+        buttonNoFilter.classList.add("btn");
+        buttonNoFilter.classList.add("btn_selected");
+        buttonNoFilter.addEventListener("click", (event) => {
 
             document.querySelector(".filters .btn_selected").classList.remove("btn_selected");
             event.target.classList.add("btn_selected");
 
-            const filteredWorks = works.filter(function (work) {
-
-                return event.target.dataset.categoryOfWork_name === work.category.name;
-            });
-            updateWorksDisplay(filteredWorks, ".gallery");
+            updateWorksDisplay(works, ".gallery");
         });
+        filtersContainer.appendChild(buttonNoFilter);
 
-        filtersContainer.appendChild(buttonFilter);
+        for (let i = 0; i < categoriesOfWorks.length; i++) {
+
+            const buttonFilter = document.createElement("input");
+            buttonFilter.type = "submit";
+            buttonFilter.classList.add("btn");
+
+            const categoryOfWork = categoriesOfWorks[i];
+
+            if (i === 3) {
+                buttonFilter.value = "Hôtels & restaurants";
+            } else {
+                buttonFilter.value = categoryOfWork.name;
+            }
+            buttonFilter.dataset.categoryOfWork_name = categoryOfWork.name;
+            buttonFilter.addEventListener("click", (event) => {
+
+                document.querySelector(".filters .btn_selected").classList.remove("btn_selected");
+                event.target.classList.add("btn_selected");
+
+                const filteredWorks = works.filter(function (work) {
+
+                    return event.target.dataset.categoryOfWork_name === work.category.name;
+                });
+                updateWorksDisplay(filteredWorks, ".gallery");
+            });
+
+            filtersContainer.appendChild(buttonFilter);
+        }
     }
 }
 
 initButtonsFilter();
-
-/*
-    Cette fonction indique si l'utilisateur est connecté.
-*/
-export function isConnected() {
-    const connexion = window.localStorage.getItem(LOCAL_STORAGE_CONNEXION_STATUS_KEY);
-    if (connexion !== undefined && connexion !== null) {
-        return connexion === "true";
-    } else {
-        console.log(`[IS_CONNECTED] Aucune donnée n'est présente localement en ce qui concerne l'utilisateur.`);
-        return false;
-    }
-}
-
-if (isConnected()) {
-    console.log("[INDEX] Un utilisateur s'est connecté, entrée en mode édition !");
-    const bodyContainer = document.body;
-    editorMode(bodyContainer);
-} else {
-    console.log("[INDEX] Aucun utilisateur n'est connecté actuellement.");
-}

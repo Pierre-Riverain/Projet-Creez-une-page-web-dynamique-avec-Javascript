@@ -365,12 +365,16 @@ footer nav ul {
 
 /* Cette partie concerne le mode édition de la page d'accueil. */
 .banner-editor-mode {
+	position: relative;
+	top: 0;
+	left: 0;
+	right: 0;
 	justify-content: center;
 	align-items: center;
 	gap: 20px;
-	width: 100%;
 	height: 59px;
 	background-color: black;
+	margin: 0;
 }
 
 .banner-editor-mode div {
@@ -378,13 +382,16 @@ footer nav ul {
 	gap: 9px;
 }
 
-.banner-editor-mode i {
+.banner-editor-mode i, .banner-editor-mode p {
 	color: white;
 }
 
 .banner-editor-mode .btn {
 	background-color: white;
 	color: black;
+	padding: 11px 23px;
+	margin: 0;
+	width: auto;
 }
 
 .btn-modify {
@@ -395,6 +402,7 @@ footer nav ul {
 .portfolio-title-container {
 	display: flex;
 	justify-content: center;
+	align-items: center;
 	gap: 31px;
 	margin-bottom: 1em;
 }

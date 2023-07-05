@@ -1,4 +1,18 @@
-import { logIn, LOCAL_STORAGE_CONNEXION_STATUS_KEY } from "./datas.js";
+/*
+    Cette fonction envoie la requête de connexion et enregistre le résultat obtenu du
+    serveur.
+*/
+async function logIn(login) {
+
+    const answerLogIn = await fetch("http://localhost:5678/api/users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: login
+    });
+
+    return answerLogIn;
+}
+
 /*
     Cette fonction initalise le listener du formulaire de connexion.
 */
@@ -13,16 +27,27 @@ function initLogin() {
 
         const loginToJson = JSON.stringify(login);
 
-        let isConnected = logIn(loginToJson);
-        window.localStorage.setItem(LOCAL_STORAGE_CONNEXION_STATUS_KEY, new Boolean(isConnected).toString());
-
-        if (isConnected) {
-            console.log("[LOGIN] Connecté avec succès !");
-            showLoginMessage("Vous êtes connecté(e) avec succès !", "validate");
-            document.location.href = "http://localhost:5501/FrontEnd/index.html";
-        } else {
-            showLoginMessage("Erreur dans l’identifiant ou le mot de passe.", "error");
-        }
+        logIn(loginToJson).then((answer) => {
+            if (answer.ok) {
+                return answer.json();
+            } else {
+                switch (answer.status) {
+                    case 401:
+                        showLoginMessage("Le mot de passe est incorrect. Veuillez rééssayer.", "error");
+                        break;
+                    case 404:
+                        showLoginMessage("Vos coordonnées n'ont pas été reconnues. Veuillez rééssayer.", "error");
+                        break;
+                }
+                return;
+            }
+        }).then((valueAnswer) => {
+            if(valueAnswer !== null || valueAnswer !== undefined) {
+                localStorage.setItem("token", valueAnswer.token);
+                showLoginMessage("Vous êtes connecté(e) avec succès !", "validate");
+                document.location.href = "http://localhost:5501/FrontEnd/index.html";
+            }
+        });
     });
 }
 

@@ -1,6 +1,6 @@
 const LOCAL_STORAGE_WORKS_KEY = "works";
 const LOCAL_STORAGE_CATEGORIES_OF_WORKS_KEY = "categoriesOfWorks";
-export const LOCAL_STORAGE_CONNEXION_STATUS_KEY = "connexionStatus";
+const LOCAL_STORAGE_CONNEXION_KEY = "connected";
 
 export let works = window.localStorage.getItem(LOCAL_STORAGE_WORKS_KEY);
 export let categoriesOfWorks = window.localStorage.getItem(LOCAL_STORAGE_CATEGORIES_OF_WORKS_KEY);
@@ -19,7 +19,7 @@ export async function loadWorksDatas() {
         works = await answer.json();
 
         const valueWorks = JSON.stringify(works);
-        window.localStorage.setItem(LOCAL_STORAGE_WORKS_KEY, valueWorks);
+        localStorage.setItem(LOCAL_STORAGE_WORKS_KEY, valueWorks);
     } else {
         works = JSON.parse(works);
     }
@@ -36,7 +36,7 @@ export async function loadCategoriesOfWorksDatas() {
         categoriesOfWorks = await answer.json();
 
         const valuesCategoriesOfWorks = JSON.stringify(categoriesOfWorks);
-        window.localStorage.setItem(LOCAL_STORAGE_CATEGORIES_OF_WORKS_KEY, valuesCategoriesOfWorks);
+        localStorage.setItem(LOCAL_STORAGE_CATEGORIES_OF_WORKS_KEY, valuesCategoriesOfWorks);
     } else {
         categoriesOfWorks = JSON.parse(categoriesOfWorks);
     }
@@ -47,19 +47,4 @@ export async function loadCategoriesOfWorksDatas() {
 */
 export async function saveModifiedDatas(datasModified) {
     
-}
-
-/*
-    Cette fonction envoie la requête de connexion et enregistre le résultat obtenu du
-    serveur.
-*/
-export async function logIn(login) {
-
-    const answerLogIn = await fetch("http://localhost:5678/api/users/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: login
-    });
-
-    return answerLogIn.ok;
 }
