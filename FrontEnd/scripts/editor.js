@@ -1,4 +1,6 @@
-/*
+import { updateWorksDisplay } from "./index.js";
+import { createAndShowGalleryModal } from "./Modal.js";
+import * as Datas from "./datas.js";
 
 /*
     Cette fonction va ajouter la bannière en haut de la page, au dessus de 
@@ -33,7 +35,6 @@ export function addBannerEditor(bodyContainer) {
         */
     });
     bannerEditorMode.appendChild(bannerEditorModeButton);
-
     bodyContainer.prepend(bannerEditorMode);
 }
 
@@ -76,9 +77,14 @@ export function addModifyButtons(bodyContainer) {
     const portfolio = document.querySelector("#portfolio");
     const portfolioTitle = document.querySelector("#portfolio h2");
     const portfolioModifyButton = createModifyButton();
-    portfolioModifyButton.marginBottom = "30px";
+    portfolioModifyButton.style.marginBottom = "30px";
     portfolioModifyButton.addEventListener("click", (event) => {
-        
+        createAndShowGalleryModal(document.body, Datas.works).then(newListOfWorks => {
+            if (newListOfWorks !== null || newListOfWorks !== undefined) {
+                updateWorksDisplay(newListOfWorks, ".gallery");
+                Datas.setWorks(newListOfWorks);
+            }
+        });
     });
 
     const portfolioTitleContainer = document.createElement("div");

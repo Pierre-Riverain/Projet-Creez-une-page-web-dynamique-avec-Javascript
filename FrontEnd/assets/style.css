@@ -288,7 +288,7 @@ nav a:hover {
 #login {
 	width: 50%;
 	margin-top: 168px;
-	margin-right : auto;
+	margin-right: auto;
 	margin-bottom: 355px;
 	margin-left: auto;
 }
@@ -374,7 +374,7 @@ footer nav ul {
 	gap: 20px;
 	height: 59px;
 	background-color: black;
-	margin: 0;
+	margin: auto -1000px;
 }
 
 .banner-editor-mode div {
@@ -382,7 +382,8 @@ footer nav ul {
 	gap: 9px;
 }
 
-.banner-editor-mode i, .banner-editor-mode p {
+.banner-editor-mode i,
+.banner-editor-mode p {
 	color: white;
 }
 
@@ -405,4 +406,146 @@ footer nav ul {
 	align-items: center;
 	gap: 31px;
 	margin-bottom: 1em;
+}
+
+/* Cette partie concerne les modales. */
+
+.background--modal {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.30);
+}
+
+.modal {
+	margin: auto;
+	border-radius: 10px;
+	position: relative;
+	width: 630px;
+	background-color: white;
+}
+
+.modal i {
+	margin: 0;
+}
+
+.modal * {
+	margin: 0 auto;
+}
+
+.modal .btn {
+	font-family: 'Syne';
+	font-weight: 700;
+	color: white;
+	background-color: #1D6154;
+	border: 1px solid #1D6154;
+	text-align: center;
+	width: 237px;
+}
+
+.modal--header {
+	display: flex;
+	flex-direction: row-reverse;
+	justify-content: space-between;
+	padding: 26px 30px 10px;
+	margin: 0;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.modal--title {
+	margin-bottom: 36px;
+	font-size: 26px;
+	font-weight: 400;
+	text-align: center;
+	width: 100%;
+}
+
+.modal--content {
+	position: relative;
+	margin: 0;
+}
+
+.modal--footer-line {
+	width: 428px;
+	height: 1px;
+	background: #B3B3B3;
+	margin: 46px auto 38px;
+}
+
+.modal--buttons-container {
+	display: flex;
+	flex-direction: column;
+	gap: 23px;
+	align-items: center;
+	margin-bottom: 48px;
+	box-sizing: border-box;
+}
+
+.modal--red-link {
+	color: red;
+	text-decoration: none;
+}
+
+/* Cette partie concerne la modale d'édition de la galerie. */
+.gallery-editor {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	grid-column-gap: 6px;
+	grid-row-gap: 10px;
+	overflow-y: auto;
+	padding: 0 70px;
+	margin: 0 auto;
+	box-sizing: border-box;
+	min-height: 390px;
+}
+
+.gallery-editor figure {
+	position: relative;
+	padding: 0;
+	width: 78px;
+}
+
+.gallery-editor div {
+	position: absolute;
+	width: 100%;
+	padding: 6px;
+	display: flex;
+	flex-direction: row-reverse;
+	z-index: 1;
+}
+
+.gallery-editor i {
+	background-color: black;
+	color: white;
+	height: 12px;
+	border-radius: 2px;
+	padding: 3px 4px;
+	font-size: 11px;
+}
+
+.gallery-editor img {
+	width: 100%;
+	height: 104px;
+	margin: 0;
+	display:  block flex;
+	flex-direction: row-reverse;
+	z-index: 1;
+}
+
+.gallery-editor .figure-buttons-container {
+	position: absolute;
+	padding: 50%;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: row-reverse;
+	gap: 3px;
+	padding: 6px;
+	box-sizing: border-box;
+	font-size: 9px;
+	z-index: 10;
 }

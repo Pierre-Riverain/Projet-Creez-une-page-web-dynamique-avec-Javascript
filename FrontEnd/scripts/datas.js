@@ -2,8 +2,8 @@ const LOCAL_STORAGE_WORKS_KEY = "works";
 const LOCAL_STORAGE_CATEGORIES_OF_WORKS_KEY = "categoriesOfWorks";
 const LOCAL_STORAGE_CONNEXION_KEY = "connected";
 
-export let works = window.localStorage.getItem(LOCAL_STORAGE_WORKS_KEY);
-export let categoriesOfWorks = window.localStorage.getItem(LOCAL_STORAGE_CATEGORIES_OF_WORKS_KEY);
+export let works;
+export let categoriesOfWorks;
 
 let listOfConnexionListeners = [];
 
@@ -13,6 +13,7 @@ let listOfConnexionListeners = [];
     depuis le serveur.
 */
 export async function loadWorksDatas() {
+    works = window.localStorage.getItem(LOCAL_STORAGE_WORKS_KEY);
 
     if (works === null) {
         const answer = await fetch("http://localhost:5678/api/works");
@@ -31,6 +32,8 @@ export async function loadWorksDatas() {
     depuis le serveur.
 */
 export async function loadCategoriesOfWorksDatas() {
+    categoriesOfWorks = window.localStorage.getItem(LOCAL_STORAGE_CATEGORIES_OF_WORKS_KEY);
+    
     if (categoriesOfWorks === null) {
         const answer = await fetch("http://localhost:5678/api/categories");
         categoriesOfWorks = await answer.json();
@@ -47,4 +50,11 @@ export async function loadCategoriesOfWorksDatas() {
 */
 export async function saveModifiedDatas(datasModified) {
     
+}
+
+/*
+    Cette fonction va mettre à jour la liste des travaux.
+*/
+export function setWorks(worksToUpdate) {
+    works = worksToUpdate;
 }
