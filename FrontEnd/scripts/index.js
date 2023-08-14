@@ -1,10 +1,21 @@
 import * as Datas from "./datas.js";
 import * as Editor from "./editor.js";
 
-const token = localStorage.getItem("token") !== null && localStorage.getItem("token") !== undefined;
+// alert(`localStorage.getItem("token") => ${localStorage.getItem("token")}\nlocalStorage.getItem("userId") => ${localStorage.getItem("userId")}`);
+const token = localStorage.getItem("token") !== null;
 
 await Datas.loadWorksDatas();
 await Datas.loadCategoriesOfWorksDatas();
+
+if (localStorage.getItem("trace") !== null) {
+    console.log(`trace => ${localStorage.getItem("trace")}`);
+    localStorage.removeItem("trace");
+}
+
+if (localStorage.getItem("trace2") !== null) {
+    console.log(`trace2 => ${localStorage.getItem("trace2")}`);
+    localStorage.removeItem("trace2");
+}
 
 if (token) {
     Editor.addBannerEditor(document.body);
@@ -24,10 +35,10 @@ export function updateWorksDisplay(works, containerElementIdentifier, editorMode
 
     for (let i = 0; i < works.length; i++) {
         const work = works[i];
-        
+
         const figureElement = document.createElement("figure");
         const imageElement = document.createElement("img");
-        
+
         imageElement.src = work.imageUrl;
         imageElement.alt = work.title;
 
@@ -42,25 +53,29 @@ export function updateWorksDisplay(works, containerElementIdentifier, editorMode
             trashElement.classList.add("btn-trash");
             trashElement.dataset.id = work.id;
             trashElement.addEventListener("click", event => {
-                console.log(`[CLICK_EVENT] Elément supprimer n° ${trashElement.dataset.id}.`);
+                let workToDelete;
                 const modifiedListOfWorks = works.filter(workToFilter => {
+                    if (Number(workToFilter.id) === Number(event.target.dataset.id)) {
+                        workToDelete = workToFilter;
+                    }
                     return Number(workToFilter.id) !== Number(event.target.dataset.id);
                 });
                 const updateListEvent = new CustomEvent("updateListOfWorks", {
                     detail: {
-                        listOfWorksUpdated: modifiedListOfWorks
-                    }
+                        listOfWorksUpdated: modifiedListOfWorks,
+                        work: workToDelete,
+                        action: "deleted"
+                    },
+                    bubbles: true
                 });
+
+                localStorage.setItem("trace", "1");
+
                 containerElement.dispatchEvent(updateListEvent);
             });
             figureButtonsContainerElement.appendChild(trashElement);
             figureElement.appendChild(figureButtonsContainerElement);
             figcaptionElement.innerText = "éditer";
-            figcaptionElement.dataset.id = work.id;
-            figcaptionElement.addEventListener("click", event => {
-                console.log(`[CLICK_EVENT] Elément éditer n° ${figcaptionElement.dataset.id}.`);
-            });
-
         } else {
             figcaptionElement.innerText = work.title;
         }
@@ -95,13 +110,13 @@ function initButtonsFilter() {
         });
         filtersContainer.appendChild(buttonNoFilter);
 
-        for (let i = 0; i < categoriesOfWorks.length; i++) {
+        for (let i = 0; i < Datas.categoriesOfWorks.length; i++) {
 
             const buttonFilter = document.createElement("input");
             buttonFilter.type = "submit";
             buttonFilter.classList.add("btn");
 
-            const categoryOfWork = categoriesOfWorks[i];
+            const categoryOfWork = Datas.categoriesOfWorks[i];
 
             if (i === 3) {
                 buttonFilter.value = "Hôtels & restaurants";

@@ -1,6 +1,9 @@
 import { updateWorksDisplay } from "./index.js";
-import { createAndShowGalleryModal } from "./Modal.js";
+import GalleryModal from "./Modals/GalleryModal.js";
 import * as Datas from "./datas.js";
+import MessageModal from "./Modals/MessageModal.js";
+
+let galleryModal;
 
 /*
     Cette fonction va ajouter la bannière en haut de la page, au dessus de 
@@ -27,15 +30,13 @@ export function addBannerEditor(bodyContainer) {
     bannerEditorModeButton.classList.add("btn");
     bannerEditorModeButton.type = "Submit";
     bannerEditorModeButton.value = "publier les changements";
-    bannerEditorModeButton.addEventListener("click", (event) => {
-        /*
-            TODO: 
-                Appeler la fonction permettant d'écrire les modifications dans le local storage et envoyer ces
-                données modifiés au serveur.
-        */
-    });
     bannerEditorMode.appendChild(bannerEditorModeButton);
     bodyContainer.prepend(bannerEditorMode);
+}
+
+export function deleteBodyMargin(elementHTML) {
+    elementHTML.style.marginLeft = `-${document.body.style.marginLeft}`;
+    elementHTML.style.marginRight = document.body.style.marginRight;
 }
 
 /*
@@ -46,7 +47,11 @@ export function modifyLinkLogin() {
     linkLoginLogout.innerHTML = "Logout";
     linkLoginLogout.addEventListener("click", (event) => {
         localStorage.removeItem("token");
-        //TODO: Ajouter une modale pour indiquer à l'utilisateur qu'il s'est déconnecté.
+        localStorage.removeItem("userId");
+        const messageModal = new MessageModal(document.body);
+        messageModal.setTitle("Information");
+        messageModal.setMessage("Vous vous êtes déconnecté !");
+        messageModal.show();
         location.reload();
     });
 }
@@ -68,7 +73,7 @@ export function addModifyButtons(bodyContainer) {
     introductionFigureModifyButton.style.marginTop = "15px";
     introductionFigureModifyButton.style.marginLeft = "57px";
     introductionFigure.appendChild(introductionFigureModifyButton);
-    
+
     const introductionArticle = document.querySelector("#introduction article");
     const introductionArticleModifyButton = createModifyButton();
     introductionArticleModifyButton.style.marginBottom = "19px";
@@ -79,11 +84,22 @@ export function addModifyButtons(bodyContainer) {
     const portfolioModifyButton = createModifyButton();
     portfolioModifyButton.style.marginBottom = "30px";
     portfolioModifyButton.addEventListener("click", (event) => {
-        createAndShowGalleryModal(document.body, Datas.works).then(newListOfWorks => {
-            if (newListOfWorks !== null || newListOfWorks !== undefined) {
-                updateWorksDisplay(newListOfWorks, ".gallery");
-                Datas.setWorks(newListOfWorks);
+        const promise = new Promise((resolve, reject) => {
+            if (!galleryModal) {
+                galleryModal = new GalleryModal(document.body);
             }
+            galleryModal.addEventListener("onHide", event => {
+                resolve(galleryModal.getDatas());
+            });
+            galleryModal.setDatas(Datas.works);
+            
+            galleryModal.show();
+
+        }).then(newListOfWorks => {
+            Datas.setWorks(newListOfWorks);
+            updateWorksDisplay(newListOfWorks, ".gallery");
+        }).catch(cause => {
+            console.error(cause);
         });
     });
 
@@ -101,7 +117,7 @@ function createModifyButton() {
     const buttonModify = document.createElement("div");
     buttonModify.type = "submit";
     buttonModify.classList.add("btn-modify");
-    
+
     const buttonModifyIcon = document.createElement("i");
     buttonModifyIcon.classList.add("fa-regular");
     buttonModifyIcon.classList.add("fa-pen-to-square");
@@ -110,6 +126,6 @@ function createModifyButton() {
     const buttonModifyParagraph = document.createElement("p");
     buttonModifyParagraph.innerText = "modifier";
     buttonModify.appendChild(buttonModifyParagraph);
-    
+
     return buttonModify;
 }

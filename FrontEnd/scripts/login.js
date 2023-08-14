@@ -1,3 +1,4 @@
+
 /*
     Cette fonction envoie la requête de connexion et enregistre le résultat obtenu du
     serveur.
@@ -44,7 +45,9 @@ function initLogin() {
         }).then((valueAnswer) => {
             if(valueAnswer !== null || valueAnswer !== undefined) {
                 localStorage.setItem("token", valueAnswer.token);
+                localStorage.setItem("userId", valueAnswer.userId);
                 showLoginMessage("Vous êtes connecté(e) avec succès !", "validate");
+
                 document.location.href = "http://localhost:5501/FrontEnd/index.html";
             }
         });

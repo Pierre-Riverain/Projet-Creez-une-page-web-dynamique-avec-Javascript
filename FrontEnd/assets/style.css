@@ -136,6 +136,7 @@ table {
 
 /** end reset css**/
 body {
+	position: relative;
 	max-width: 1140px;
 	margin: auto;
 	font-family: 'Work Sans';
@@ -281,16 +282,12 @@ nav a:hover {
 
 .gallery img {
 	width: 100%;
-
 }
 
-/* Cette partie concerne la section contact et la section de connexion (les formulaires). */
+/* Cette partie concerne les formulaires. */
 #login {
 	width: 50%;
-	margin-top: 168px;
-	margin-right: auto;
-	margin-bottom: 355px;
-	margin-left: auto;
+	margin: 168px auto 355px;
 }
 
 #contact {
@@ -298,10 +295,19 @@ nav a:hover {
 	margin: auto;
 }
 
+#addPhoto {
+	width: 420px;
+	margin: 0 105px;
+}
+
 #contact>*,
 #login>* {
 	text-align: center;
+}
 
+#addPhoto>* {
+	text-align: center;
+	width: 100%;
 }
 
 #contact h2,
@@ -310,15 +316,22 @@ nav a:hover {
 }
 
 #contact form,
-#login form {
+#login form,
+#addPhoto form {
 	text-align: left;
 	margin-top: 30px;
 	display: flex;
 	flex-direction: column;
 }
 
+#addPhoto form>* {
+	box-sizing: border-box;
+	width: 100%;
+}
+
 #contact input,
-#login input {
+#login input,
+#addPhoto input {
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
@@ -326,13 +339,21 @@ nav a:hover {
 }
 
 #contact label,
-#login label {
+#login label,
+#addPhoto label {
 	margin: 2em 0 1em 0;
 }
 
 #contact textarea {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+#addPhoto select {
+	border: none;
+	height: 50px;
+	box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.09);
+	padding-right: 28px;
 }
 
 input[type="submit"] {
@@ -357,6 +378,8 @@ input[type="submit"] {
 	margin-top: 24px;
 }
 
+/* Cette partie concerne le pied de page */
+
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
@@ -374,7 +397,7 @@ footer nav ul {
 	gap: 20px;
 	height: 59px;
 	background-color: black;
-	margin: auto -1000px;
+	margin: auto -381px;
 }
 
 .banner-editor-mode div {
@@ -414,17 +437,17 @@ footer nav ul {
 	display: none;
 	position: absolute;
 	top: 0;
+	bottom: 0;
 	left: 0;
-	width: 100%;
-	height: 100%;
+	right: 0;
 	background: rgba(0, 0, 0, 0.30);
+	margin: auto -1000px;
 }
 
 .modal {
-	margin: auto;
+	margin: 600px auto auto;
 	border-radius: 10px;
 	position: relative;
-	width: 630px;
 	background-color: white;
 }
 
@@ -444,6 +467,12 @@ footer nav ul {
 	border: 1px solid #1D6154;
 	text-align: center;
 	width: 237px;
+	margin-bottom: 0;
+}
+
+.modal .btn:disabled {
+	background-color: #a7a7a7;
+	border: none;
 }
 
 .modal--header {
@@ -500,7 +529,7 @@ footer nav ul {
 	padding: 0 70px;
 	margin: 0 auto;
 	box-sizing: border-box;
-	min-height: 390px;
+	height: 390px;
 }
 
 .gallery-editor figure {
@@ -547,5 +576,62 @@ footer nav ul {
 	padding: 6px;
 	box-sizing: border-box;
 	font-size: 9px;
-	z-index: 10;
+}
+
+/* Cette partie concerne la modale d'édition d'un travail */
+
+#input-file {
+	display: none;
+}
+
+.photo-container-element {
+	background-color: #e8f1f6;
+	border-radius: 3px;
+	width: 420px;
+	height: 169px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.photo-container-element > * {
+	margin: 0 auto;
+}
+
+.photo-container-element i {
+	margin-top: 22px;
+	margin-bottom: 15px;
+	margin-left: 180px;
+	font-size: 58px;
+	color: #b9c5cc;
+}
+
+.photo-container-element .btn {
+	border: none;
+	background-color: #CBD6DC;
+	color: #306685;
+	text-align: center;
+	font-size: 14px;
+	font-weight: 500;
+	margin-bottom: 7px;
+	width: 173px;
+	padding: 10px 33px;
+}
+
+.photo-container-element p {
+	font-size: 10px;
+}
+
+.photo-container-element img {
+	height: 100%;
+	margin: 0 auto;
+}
+
+/* Cette partie concerne la modale de message. */
+
+.message-text {
+	display: block;
+	width: 100%;
+	text-align: center;
 }

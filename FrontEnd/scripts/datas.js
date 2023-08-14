@@ -1,11 +1,10 @@
 const LOCAL_STORAGE_WORKS_KEY = "works";
 const LOCAL_STORAGE_CATEGORIES_OF_WORKS_KEY = "categoriesOfWorks";
-const LOCAL_STORAGE_CONNEXION_KEY = "connected";
 
-export let works;
-export let categoriesOfWorks;
+export let works = null;
+export let categoriesOfWorks = null;
 
-let listOfConnexionListeners = [];
+let idAvailable = 1;
 
 /*
     Cette fonction charge les données des travaux présent localement ou 
@@ -13,7 +12,7 @@ let listOfConnexionListeners = [];
     depuis le serveur.
 */
 export async function loadWorksDatas() {
-    works = window.localStorage.getItem(LOCAL_STORAGE_WORKS_KEY);
+    // works = window.localStorage.getItem(LOCAL_STORAGE_WORKS_KEY);
 
     if (works === null) {
         const answer = await fetch("http://localhost:5678/api/works");
@@ -24,6 +23,7 @@ export async function loadWorksDatas() {
     } else {
         works = JSON.parse(works);
     }
+    idAvailable = works[works.length-1].id + 1;
 }
 
 /*
@@ -33,7 +33,7 @@ export async function loadWorksDatas() {
 */
 export async function loadCategoriesOfWorksDatas() {
     categoriesOfWorks = window.localStorage.getItem(LOCAL_STORAGE_CATEGORIES_OF_WORKS_KEY);
-    
+
     if (categoriesOfWorks === null) {
         const answer = await fetch("http://localhost:5678/api/categories");
         categoriesOfWorks = await answer.json();
@@ -46,15 +46,34 @@ export async function loadCategoriesOfWorksDatas() {
 }
 
 /*
-    Cette fonction va sauvegarder les données modifiées au serveur et localement.
-*/
-export async function saveModifiedDatas(datasModified) {
-    
-}
-
-/*
     Cette fonction va mettre à jour la liste des travaux.
 */
 export function setWorks(worksToUpdate) {
     works = worksToUpdate;
+}
+
+/*
+    Ce constructeur permet de créer un nouveau "travail" / une nouvelle photo à intégrer dans la galerie. 
+*/
+export function Work() {
+    this.id = idAvailable++;
+    this.title = "";
+    this.imageUrl = "";
+    this.categoryId = 0;
+    this.userId = localStorage.getItem("userId");
+    this.category = {}
+}
+
+/*
+    Cette fonction permet d'obtenir une catégorie suivant son identifiant.
+*/
+export function getCategoryById(id) {
+    let categoryOfWork;
+    categoriesOfWorks.forEach(categoryOfWorkTemp => {
+        if (Number(categoryOfWorkTemp.id) === Number(id)) {
+            categoryOfWork = categoryOfWorkTemp;
+        }
+    });
+
+    return categoryOfWork;
 }
