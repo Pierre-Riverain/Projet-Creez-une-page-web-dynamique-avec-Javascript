@@ -1,8 +1,10 @@
 import Modal from './Modal.js';
 import PhotoModal from './PhotoModal.js';
 
-import { updateWorksDisplay } from "../index.js";
-
+import * as Datas from "../datas.js";
+/*
+    Cette classe représente la modale d'édition de la galerie.
+*/
 export default class GalleryModal extends Modal {
     constructor(bodyContainer) {
         super(bodyContainer);
@@ -28,39 +30,24 @@ export default class GalleryModal extends Modal {
         this.#initializeListeners();
     }
 
+    /*
+        Cette fonction initialise les captures des évènements des composants de la modale.
+    */
     #initializeListeners() {
         this.addImageButton.addEventListener("submit", event => {
             event.preventDefault();
-            console.log(`Evènement intercepté !`);
         });
         this.addImageButton.addEventListener("click", event => {
             event.preventDefault();
+
             new Promise((resolve, reject) => {
                 this.photoModal = new PhotoModal(this.bodyContainer);
                 this.photoModal.addEventListener("onHide", event => {
-                    this.photoModal.deleteModalInDOM();
-                    if (event.detail.actionTarget === "validate") {
-
-                        resolve(this.photoModal.getDatas());
-                    } else {
-                        reject(event.detail.actionTarget);
-                    }
+                    resolve();
                 });
 
                 this.photoModal.show();
-            }).then(result => {
-                const modifiedListOfWorks = this.getDatas();
-                modifiedListOfWorks.push(result.work);
-                const updateListEvent = new CustomEvent("updateListOfWorks", {
-                    detail: {
-                        listOfWorksUpdated: modifiedListOfWorks,
-                        work: result.work,
-                        imageFile: result.imageFile,
-                        action: "added"
-                    },
-                    bubbles: true
-                });
-                this.dispatchEvent(updateListEvent);
+            }).then(() => {
                 this.show();
             });
             this.hide();
@@ -68,66 +55,17 @@ export default class GalleryModal extends Modal {
 
         this.deleteGalleryButton.addEventListener("submit", event => {
             event.preventDefault();
-            console.log(`Evènement intercepté !`);
         });
         this.deleteGalleryButton.addEventListener("click", event => {
+            event.preventDefault();
 
-            this.getDatas.forEach(async work => {
-                this.#sendWorkToDeleteToServer(work);
+            this.getDatas.forEach(work => {
+                Datas.deleteWork(work);
             });
-            this.setDatas([]);
-            updateWorksDisplay(this.getDatas(), ".gallery-editor", true);
-        });
-
-        this.addEventListener("updateListOfWorks", event => {
-            event.stopImmediatePropagation();
-            this.setDatas(event.detail.listOfWorksUpdated);
-            updateWorksDisplay(event.detail.listOfWorksUpdated, ".gallery-editor", true);
-            switch (event.detail.action) {
-                case "added":
-                    this.#sendNewWorkToServer(event.detail.work, event.detail.imageFile);
-                    break;
-                case "deleted":
-                    this.#sendWorkToDeleteToServer(event.detail.work);
-                    break;
-            }
-            localStorage.setItem("trace2", "Fin de l'évènement de mise à jour !");
-
-            return false;
         });
 
         this.addEventListener("onShow", event => {
-            updateWorksDisplay(this.getDatas(), ".gallery-editor", true);
+            Datas.updateWorksDisplay(Datas.works, ".gallery-editor", true);
         });
-    }
-
-    async #sendNewWorkToServer(work, imageFile) {
-        const newWorkDatas = new FormData();
-        newWorkDatas.append("image", imageFile);
-        newWorkDatas.append("title", work.title);
-        newWorkDatas.append("category", work.category.id);
-
-        const answer = await fetch("http://localhost:5678/api/works", {
-            method: "POST",
-            headers: new Headers({ "Authorization": `Bearer ${localStorage.getItem("token")}` }),
-            body: newWorkDatas
-        });
-
-        localStorage.setItem("trace", `[#sendNewWorkToServer(work, imageFile)] Server response : (${answer.status} - ${answer.statusText})`);
-    }
-    
-    async #sendWorkToDeleteToServer(work) {
-        if (localStorage.getItem("token") === null) {
-            console.error(`token => ${localStorage.getItem("token")}`);
-        } else {
-            
-        }
-        
-        const answer = await fetch(`http://localhost:5678/api/works/${work.id}`, {
-            method: "DELETE",
-            headers: new Headers({ "Authorization": `Bearer ${localStorage.getItem("token")}` })
-        });
-        
-        localStorage.setItem("trace", `[#sendWorkToDeleteToServer(work)] Server response : (${answer.status} - ${answer.statusText})`);
     }
 }

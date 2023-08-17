@@ -48,7 +48,7 @@ function initLogin() {
                 localStorage.setItem("userId", valueAnswer.userId);
                 showLoginMessage("Vous êtes connecté(e) avec succès !", "validate");
 
-                document.location.href = "http://localhost:5501/FrontEnd/index.html";
+                document.location.href = "./index.html";
             }
         });
     });

@@ -1,5 +1,8 @@
 import Modal from "./Modal.js";
 
+/*
+    Cett classe représente la modale permettant d'afficher les messages.
+*/
 export default class MessageModal extends Modal {
     constructor(bodyContainer) {
         super(bodyContainer);
@@ -15,6 +18,9 @@ export default class MessageModal extends Modal {
         this.#initialize();
     }
 
+    /*
+        Cette fonction initialise les composants de la modale permettant d'afficher des messages.
+    */
     #initialize() {
         this.messageText.classList.add("message-text");
         this.setContent(this.messageText);
@@ -38,37 +44,50 @@ export default class MessageModal extends Modal {
         this.#initializeListeners();
     }
 
+    /*
+        Cette fonction initialise les évènements des boutons de cette modale.
+    */
     #initializeListeners() {
         this.firstButton.addEventListener("click", event => {
-            this.#onButtonClick(event.target);
+            this.#onButtonClick(event.target, this.firstButtonClickListener);
         });
 
         this.secondButton.addEventListener("click", event => {
-            this.#onButtonClick(event.target);
+            this.#onButtonClick(event.target, this.secondButtonClickListener);
         });
 
         this.thirdButton.addEventListener("click", event => {
-            this.#onButtonClick(event.target);
+            this.#onButtonClick(event.target, this.thirdButtonClickListener);
         });
     }
 
-    #onButtonClick(eventTarget) {
+    /*
+        Cette fonction est appelé lorsque l'utilisateur clique sur un bouton.
+    */
+    #onButtonClick(eventTarget, clickListener) {
         this.datas = eventTarget.value;
         this.hide(eventTarget.value, true);
+
+        if (clickListener !== null && "function" === typeof clickListener) {
+            clickListener(eventTarget);
+        }
     }
 
-    setFirstButton(value) {
+    setFirstButton(value, clickListener = null) {
         this.firstButton.value = value;
+        this.firstButtonClickListener = clickListener;
     }
-
-    setSecondButton(value) {
+    
+    setSecondButton(value, clickListener = null) {
         this.secondButton.value = value;
         this.secondButton.style.display = "block";
+        this.secondButtonClickListener = clickListener;
     }
-
-    setThirdButton(value) {
+    
+    setThirdButton(value, clickListener = null) {
         this.thirdButton.value = value;
         this.thirdButton.style.display = "block";
+        this.thirdButtonClickListener = clickListener;
     }
 
     setMessage(message) {

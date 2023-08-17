@@ -3,6 +3,9 @@ import MessageModal from "./MessageModal.js";
 
 import * as Datas from "../datas.js";
 
+/*
+    Cette classe représente la modale qui permet de créer un nouveau travail.
+*/
 export default class PhotoModal extends Modal {
     constructor(bodyContainer) {
         super(bodyContainer);
@@ -40,6 +43,9 @@ export default class PhotoModal extends Modal {
         this.#initializeListeners();
     }
 
+    /*
+        Cette fonction initialise les composants de la modale.
+    */
     #initialize() {
         this.photoContentElement.id = "addPhoto";
 
@@ -76,6 +82,9 @@ export default class PhotoModal extends Modal {
         this.validateButton.disabled = true;
     }
 
+    /*
+        Cette fonction initialise le composant qui permet de sélectionner la photo et de l"afficher.
+    */
     #initializePhotoContainerElement() {
         this.photoContainerElement.classList.add("photo-container-element");
 
@@ -94,6 +103,9 @@ export default class PhotoModal extends Modal {
         this.photoContainerElement.appendChild(this.photoParagraph);
     }
 
+    /*
+        Cette fonction initialise les évènements des composants de cette modale.
+    */
     #initializeListeners() {
         this.photoInputFileElement.addEventListener("change", event => {
             
@@ -150,7 +162,7 @@ export default class PhotoModal extends Modal {
                     throw new Error("Vous n'avez pas sélectionné de catégorie, veuillez en sélectionner une !");
                 }
 
-                this.hide("validate", true);
+                Datas.createNewWork(this.datas.work, this.datas.imageFile);
             } catch (error) {
                 if (userError) {
                     messageModal.setTitle("Informations manquantes !");
@@ -165,6 +177,9 @@ export default class PhotoModal extends Modal {
 
     }
 
+    /*
+        Cette fonction privé permet de mettre à jour l'affichage du composant permettant de choisir et d'afficher une photo.
+    */
     #updatePhotoContainerElement(imageUrl) {
         this.photoContainerElement.innerHTML = "";
         if (!imageUrl) {
@@ -178,6 +193,9 @@ export default class PhotoModal extends Modal {
         }
     }
 
+    /*
+        Cette fonction détruit la modale dans le DOM quand elle est appelée.
+    */
     deleteModalInDOM() {
         this.background.remove();
     }

@@ -1,4 +1,3 @@
-import { updateWorksDisplay } from "./index.js";
 import GalleryModal from "./Modals/GalleryModal.js";
 import * as Datas from "./datas.js";
 import MessageModal from "./Modals/MessageModal.js";
@@ -34,11 +33,6 @@ export function addBannerEditor(bodyContainer) {
     bodyContainer.prepend(bannerEditorMode);
 }
 
-export function deleteBodyMargin(elementHTML) {
-    elementHTML.style.marginLeft = `-${document.body.style.marginLeft}`;
-    elementHTML.style.marginRight = document.body.style.marginRight;
-}
-
 /*
     Cette fonction modifie le lien vers la connexion en lien de déconnexion et de sortie du mode éditeur.
 */
@@ -51,8 +45,10 @@ export function modifyLinkLogin() {
         const messageModal = new MessageModal(document.body);
         messageModal.setTitle("Information");
         messageModal.setMessage("Vous vous êtes déconnecté !");
+        messageModal.setFirstButton("Ok", (button) => {
+            location.reload();
+        })
         messageModal.show();
-        location.reload();
     });
 }
 
@@ -84,23 +80,10 @@ export function addModifyButtons(bodyContainer) {
     const portfolioModifyButton = createModifyButton();
     portfolioModifyButton.style.marginBottom = "30px";
     portfolioModifyButton.addEventListener("click", (event) => {
-        const promise = new Promise((resolve, reject) => {
-            if (!galleryModal) {
-                galleryModal = new GalleryModal(document.body);
-            }
-            galleryModal.addEventListener("onHide", event => {
-                resolve(galleryModal.getDatas());
-            });
-            galleryModal.setDatas(Datas.works);
-            
-            galleryModal.show();
-
-        }).then(newListOfWorks => {
-            Datas.setWorks(newListOfWorks);
-            updateWorksDisplay(newListOfWorks, ".gallery");
-        }).catch(cause => {
-            console.error(cause);
-        });
+        if (!galleryModal) {
+            galleryModal = new GalleryModal(document.body);
+        }
+        galleryModal.show();
     });
 
     const portfolioTitleContainer = document.createElement("div");
