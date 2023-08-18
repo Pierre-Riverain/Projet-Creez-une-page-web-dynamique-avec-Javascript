@@ -13,7 +13,7 @@ localStorage.removeItem(LOCAL_STORAGE_WORKS_KEY);
     depuis le serveur.
 */
 export async function loadWorksDatas() {
-    // works = window.localStorage.getItem(LOCAL_STORAGE_WORKS_KEY);
+    works = window.localStorage.getItem(LOCAL_STORAGE_WORKS_KEY);
 
     if (works === null) {
         const answer = await fetch("http://localhost:5678/api/works");
