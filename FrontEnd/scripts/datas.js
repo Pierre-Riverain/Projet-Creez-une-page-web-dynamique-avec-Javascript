@@ -148,7 +148,6 @@ export function createNewWork(work, imageFile) {
         headers: new Headers({ "Authorization": `Bearer ${localStorage.getItem("token")}` }),
         body: newWorkDatas
     }).then(result => {
-        console.log(result);
     });
 
     works.push(work);
@@ -168,7 +167,6 @@ export function deleteWork(work) {
         method: "DELETE",
         headers: new Headers({ "Authorization": `Bearer ${localStorage.getItem("token")}` })
     }).then(result => {
-        console.log(result);
     });
     
     const workFiltered = works.filter(workToFilter => {

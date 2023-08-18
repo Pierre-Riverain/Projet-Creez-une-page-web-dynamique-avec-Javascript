@@ -15,7 +15,7 @@ if (localStorage.getItem("token") !== null) {
 }
 
 /*
-    Cette fonction initialise les filtres en ajoutant les boutons 
+    Cette fonction initialise les filtres en ajoutant les boutons.
 */
 function initButtonsFilter() {
     if (localStorage.getItem("token") !== null) {
